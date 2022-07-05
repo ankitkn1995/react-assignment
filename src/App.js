@@ -1,24 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+/** @format */
+import "./App.css";
+import Register from "./auth/Register";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./auth/Login";
+import Home from "./component/Home";
+import Header from "./component/Header";
+import ProtectRoute from "./auth/protectRoute";
+import { useSelector } from "react-redux";
+import AddAndEditUser from "./crud/AddAndEditUser";
+import UserInfo from "./component/UserInfo";
 
 function App() {
+  const user = useSelector((state) => state);
+  console.log(user);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/user/:id' element={<UserInfo />} />
+        <Route
+          path='register'
+          element={
+            <ProtectRoute>
+              <Register />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path='/login'
+          element={
+            <ProtectRoute>
+              <Login />
+            </ProtectRoute>
+          }
+        />
+        <Route path='/addUser' element={<AddAndEditUser />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
