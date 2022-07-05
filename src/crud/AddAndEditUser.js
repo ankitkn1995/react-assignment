@@ -1,10 +1,10 @@
 /** @format */
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ToastContainerCommon from "../ToastContainerCommon";
-import { createUser } from "./crudSlice";
+import { createUser, updateUser } from "./crudSlice";
 const AddAndEditUser = () => {
   const [formVal, setFormVal] = useState({
     name: "",
@@ -13,32 +13,60 @@ const AddAndEditUser = () => {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [editMode, setEditMode] = useState(false);
+  const { id } = useParams();
   const handleChange = (e) => {
     setFormVal({ ...formVal, [e.target.name]: e.target.value });
   };
+  const { users } = useSelector((state) => state.crud);
+  useEffect(() => {
+    if (id) {
+      setEditMode(true);
+      const singleUser = users.find((item) => item.id == id);
+      setFormVal({ ...singleUser });
+    }
+  }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { name, email, mobile } = formVal;
     if (name && email && mobile) {
-      dispatch(createUser({ formVal }));
-      toast.success("User added", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      setFormVal({
-        name: "",
-        email: "",
-        mobile: "",
-      });
-
-      navigate("/");
-    } else {
+      if (!editMode) {
+        dispatch(createUser({ formVal }));
+        toast.success("User added", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setFormVal({
+          name: "",
+          email: "",
+          mobile: "",
+        });
+        navigate("/");
+      } else {
+        dispatch(updateUser({ id, formVal }));
+        setEditMode(false);
+        navigate("/");
+        toast.success("User updated successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setFormVal({
+          name: "",
+          email: "",
+          mobile: "",
+        });
+      }
     }
   };
   return (

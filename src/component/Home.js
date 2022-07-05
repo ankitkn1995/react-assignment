@@ -43,7 +43,7 @@ const Home = () => {
                         <Link to={`/user/${item.id}`}> View</Link>
                       </div>
                       <div>
-                        <Link to='#'>Edit</Link>
+                        <Link to={`/editUser/${item.id}`}>Edit</Link>
                       </div>
                       <div>
                         <Link to='#' onClick={() => handleDel(item.id)}>

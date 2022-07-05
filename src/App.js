@@ -19,6 +19,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/user/:id' element={<UserInfo />} />
+        <Route path='/editUser/:id' element={<AddAndEditUser />} />
         <Route
           path='register'
           element={

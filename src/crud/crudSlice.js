@@ -30,6 +30,15 @@ export const createUser = createAsyncThunk(
     console.log(result);
   }
 );
+export const updateUser = createAsyncThunk(
+  "create/updateUser",
+  async ({ id, formVal }) => {
+    console.log(formVal);
+    const result = axios
+      .put(`http://localhost:5000/users/${id}`, formVal)
+      .then((res) => res);
+  }
+);
 const crudSlice = createSlice({
   name: "crud",
   initialState: initialState,
@@ -71,6 +80,17 @@ const crudSlice = createSlice({
       state.users = action.payload;
     },
     [createUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [updateUser.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [updateUser.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.users = action.payload;
+    },
+    [updateUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
