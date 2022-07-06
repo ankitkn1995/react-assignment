@@ -6,6 +6,8 @@ const initialState = {
   users: [],
   loading: false,
   error: null,
+  currentPage: 0,
+  pageLimit: 5,
 };
 export const delUser = createAsyncThunk("user/delUser", async ({ id }) => {
   console.log(id);
@@ -14,11 +16,28 @@ export const delUser = createAsyncThunk("user/delUser", async ({ id }) => {
     .then((res) => res.data);
   return result;
 });
-export const loadUsers = createAsyncThunk("user/createUser", async () => {
+
+export const loadUsers = createAsyncThunk(
+  "user/createUser",
+  async ({ start, end, currentPage }) => {
+    const result = axios
+      .get(`http://localhost:5000/users?_start=${start}&_end=${end}`)
+      .then((res) => {
+        return { res: res.data, currentPage };
+      });
+    return result;
+  }
+);
+export const sortUsers = createAsyncThunk("user/createUser", async (val) => {
   const result = axios
-    .get(`http://localhost:5000/users`)
-    .then((res) => res.data);
-  console.log(result, "red");
+    .get(`http://localhost:5000/users?_sort=${val}&_order=asc`)
+    .then((res) => {
+      return {
+        res: res.data.sort((a, b) =>
+          a.data > b.data ? 1 : b.data > a.data ? -1 : 0
+        ),
+      };
+    });
   return result;
 });
 export const createUser = createAsyncThunk(
@@ -53,10 +72,13 @@ const crudSlice = createSlice({
     [loadUsers.pending]: (state, action) => {
       state.loading = true;
     },
-    [loadUsers.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.users = action.payload;
-    },
+    [loadUsers.fulfilled]: setTimeout(() => {
+      return (state, action) => {
+        state.loading = false;
+        state.users = action.payload.res.res;
+        state.currentPage = state.currentPage + action.payload.currentPage;
+      };
+    }, 5000),
     [loadUsers.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
@@ -80,6 +102,18 @@ const crudSlice = createSlice({
       state.users = action.payload;
     },
     [createUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    [sortUsers.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [sortUsers.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.users = action.payload;
+    },
+    [sortUsers.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

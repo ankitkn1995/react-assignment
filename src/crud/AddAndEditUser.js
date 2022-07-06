@@ -22,7 +22,7 @@ const AddAndEditUser = () => {
   useEffect(() => {
     if (id) {
       setEditMode(true);
-      const singleUser = users.find((item) => item.id == id);
+      const singleUser = users.res.find((item) => item.id == id);
       setFormVal({ ...singleUser });
     }
   }, [id]);
@@ -72,7 +72,7 @@ const AddAndEditUser = () => {
   return (
     <div>
       <form onSubmit={handleSubmit} className='design__form'>
-        <div className='heading'>Add New User</div>
+        <div className='heading'>{editMode ? "Edit User" : "Add New User"}</div>
         {/* <div className='success'>{message === "" ? "" : message}</div> */}
         <div className='input'>
           <label>Name</label>
@@ -104,7 +104,7 @@ const AddAndEditUser = () => {
           />
         </div>
         <div>
-          <button type='submit'>Add User</button>
+          <button type='submit'>{editMode ? "Update User" : "Add User"}</button>
         </div>
       </form>
       <ToastContainerCommon />

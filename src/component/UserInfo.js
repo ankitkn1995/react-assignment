@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 const UserInfo = () => {
   const { users } = useSelector((state) => state.crud);
   const { id } = useParams();
-  const singleUser = users.find((item) => item.id == id);
+  const singleUser = users?.res?.find((item) => item.id == id);
   console.log(singleUser);
   return (
     <div style={{ marginTop: "100px" }}>

@@ -82,6 +82,7 @@ table td {
 }
 .table__top {
   margin-top: 100px;
+  margin-bottom: 80px;
 }
 .table__message {
   text-align: center;
@@ -109,4 +110,46 @@ table td {
 }
 table {
   overflow-x: scroll;
+}
+.table__sort {
+  margin-left: 100px;
+  margin-bottom: 20px;
+}
+.table__sort div {
+  padding: 0 10px;
+  font-weight: 600;
+}
+.table__sort select {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+}
+.table__page {
+  display: flex;
+  padding: 10px;
+  text-align: center;
+  justify-content: center;
+}
+.table__page .table__page__bt {
+  border: 1px solid;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+}
+.table__page__bt.active {
+  background-color: #030303;
+  color: #fff;
+}
+.table__action__sec {
+  display: flex;
+}
+.table__action__bt {
+  margin: 10px 10px;
+}
+.table__action__bt a {
+  text-decoration: none;
+  color: #fff;
+  background-color: #030303;
+  padding: 12px 23px;
+  border-radius: 10px;
 }
