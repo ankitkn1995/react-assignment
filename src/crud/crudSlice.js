@@ -23,6 +23,7 @@ export const loadUsers = createAsyncThunk(
     const result = axios
       .get(`http://localhost:5000/users?_start=${start}&_end=${end}`)
       .then((res) => {
+        console.log(res, "c");
         return { res: res.data, currentPage };
       });
     return result;

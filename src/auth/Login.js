@@ -44,6 +44,7 @@ const Login = () => {
           loggedIn: true,
         })
       );
+
       setTimeout(() => {
         navigate("/");
       }, 2000);
